@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Node.js & Express.js Ecosystem: An Infographic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <!--
+      Narrative Plan:
+      1. Hook: Start with the scale of the npm ecosystem.
+      2. Core Concept: Visualize the non-blocking Event Loop.
+      3. Ecosystem Power: Show popular npm packages with a bar chart.
+      4. Async Evolution: Compare Callback, Promise, and Async/Await structures.
+      5. Express Middleware: Diagram the request-response flow.
+      6. API Design: Show HTTP method distribution with a donut chart.
+      7. Data Layer: Compare SQL vs. NoSQL popularity with a pie chart.
+      8. Security: Illustrate the JWT authentication flow.
+      9. Deployment: Show the modern deployment pipeline.
+      
+      Visualization Choices:
+      - Big Number (npm packages): Goal: Inform. Method: Styled HTML. Justification: High impact for a single stat.
+      - Event Loop: Goal: Organize. Method: Flow Chart (HTML/CSS). Justification: Best for showing a process. NO SVG/Mermaid.
+      - Package Popularity: Goal: Compare. Method: Bar Chart (Chart.js). Justification: Ideal for comparing discrete items.
+      - Async Comparison: Goal: Compare/Organize. Method: Custom Diagram (HTML/CSS). Justification: Visualizes code structure effectively.
+      - Middleware Flow: Goal: Organize. Method: Flow Chart (HTML/CSS). Justification: Clearly shows a linear pipeline. NO SVG/Mermaid.
+      - HTTP Methods: Goal: Compare (Composition). Method: Donut Chart (Chart.js). Justification: Shows proportions of a whole.
+      - Database Types: Goal: Compare (Composition). Method: Pie Chart (Chart.js). Justification: Simple comparison of two main categories.
+      - JWT Flow: Goal: Organize. Method: Flow Chart (HTML/CSS). Justification: Best for a step-by-step security process. NO SVG/Mermaid.
+      - Deployment Pipeline: Goal: Organize/Change. Method: Timeline (HTML/CSS). Justification: Shows a sequence of events. NO SVG/Mermaid.
+      
+      All visualization choices strictly adhere to the NO SVG and NO MERMAID JS constraints.
+      
+      Color Palette: "Energetic & Playful"
+      - Primary Green: #00F0B5
+      - Cyan: #00E0F0
+      - Indigo: #6675FF
+      - Purple: #9D66FF
+      - Pink: #F066E0
+      - Dark Background: #1a202c
+      - Text Color: #e2e8f0
+    -->
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #1a202c;
+        color: #e2e8f0;
+      }
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 300px;
+        max-height: 400px;
+      }
+      @media (min-width: 768px) {
+        .chart-container {
+          height: 400px;
+        }
+      }
+      .flow-arrow {
+        position: relative;
+        width: 1.5rem;
+        height: 1.5rem;
+        margin: 1rem auto;
+        transform: rotate(90deg);
+      }
+      .flow-arrow::before {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 15px solid #00f0b5;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .timeline-item {
+        position: relative;
+        padding-bottom: 2rem;
+        padding-left: 2.5rem;
+      }
+      .timeline-item:not(:last-child)::before {
+        content: "";
+        position: absolute;
+        left: 1rem;
+        top: 0.5rem;
+        width: 2px;
+        height: 100%;
+        background-color: #6675ff;
+      }
+      .timeline-icon {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 9999px;
+        background-color: #6675ff;
+        color: #1a202c;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+      <header class="text-center mb-16 md:mb-24">
+        <h1
+          class="text-4xl md:text-6xl font-black tracking-tight text-white mb-4"
+        >
+          The Node.js & Express.js Ecosystem
+        </h1>
+        <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+          An interactive guide to the key concepts, tools, and workflows that
+          power modern backend development with JavaScript.
+        </p>
+      </header>
+
+      <main class="space-y-16 md:space-y-24">
+        <section id="intro" class="text-center">
+          <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-2xl mx-auto">
+            <h3 class="text-2xl font-bold text-gray-300 mb-2">
+              The World's Largest Software Library
+            </h3>
+            <p
+              class="text-7xl md:text-8xl font-black text-white"
+              style="color: #00f0b5"
+            >
+              1.3 Million+
+            </p>
+            <p class="text-lg text-gray-400 mt-2">
+              Packages available on npm, making it the central hub for
+              JavaScript developers to share and consume code.
+            </p>
+          </div>
+        </section>
+
+        <section id="event-loop">
+          <h2 class="text-3xl font-bold text-center mb-10">
+            The Magic of Non-Blocking I/O: The Event Loop
+          </h2>
+          <div
+            class="bg-gray-800 rounded-2xl shadow-2xl p-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
+          >
+            <div class="prose prose-invert max-w-none text-gray-300">
+              <p class="text-lg">
+                Node.js achieves high performance by not waiting for slow
+                operations like reading a file or making a network request.
+                Instead of blocking, it uses an event-driven model.
+              </p>
+              <ol class="list-decimal list-inside space-y-2">
+                <li>
+                  A request arrives and an operation (e.g., database query) is
+                  initiated.
+                </li>
+                <li>
+                  Node.js doesn't wait. It immediately takes the next request.
+                </li>
+                <li>
+                  When the database finishes, it places a message in the event
+                  queue.
+                </li>
+                <li>
+                  The event loop picks up the completed event and sends the
+                  result back.
+                </li>
+              </ol>
+              <p>
+                This approach allows a single Node.js process to handle
+                thousands of concurrent connections efficiently, making it ideal
+                for I/O-heavy applications like APIs, chat servers, and
+                streaming services.
+              </p>
+            </div>
+            <div class="flex flex-col items-center justify-center p-4">
+              <div class="text-center p-4 rounded-lg bg-gray-700 w-full">
+                Request 1 (Read File)
+              </div>
+              <div class="flow-arrow"></div>
+              <div class="text-center p-4 rounded-lg bg-gray-700 w-full">
+                Start Operation
+              </div>
+              <div class="flow-arrow"></div>
+              <div class="text-center p-4 rounded-lg bg-gray-700 w-full">
+                Handle Request 2
+              </div>
+              <div class="flow-arrow"></div>
+              <div
+                class="text-center p-4 rounded-lg"
+                style="background-color: #00f0b5; color: #1a202c"
+              >
+                File Read Complete (Event)
+              </div>
+              <div class="flow-arrow"></div>
+              <div class="text-center p-4 rounded-lg bg-gray-700 w-full">
+                Return Result 1
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="npm-packages">
+          <h2 class="text-3xl font-bold text-center mb-10">
+            Powering Projects: Essential npm Packages
+          </h2>
+          <div
+            class="bg-gray-800 rounded-2xl shadow-2xl p-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
+          >
+            <div class="prose prose-invert max-w-none text-gray-300">
+              <p class="text-lg">
+                The true power of Node.js comes from its vast ecosystem.
+                Developers rely on open-source packages to add functionality
+                without reinventing the wheel.
+              </p>
+              <p>
+                This chart shows the conceptual popularity (represented as
+                weekly downloads) of some of the most fundamental packages in
+                the Node.js world.
+                <strong style="color: #00f0b5">Express</strong> is the dominant
+                web framework, while tools like
+                <strong style="color: #6675ff">Axios</strong> (for HTTP
+                requests) and
+                <strong style="color: #9d66ff">Nodemon</strong> (for
+                development) are staples in almost every project.
+              </p>
+            </div>
+            <div class="chart-container">
+              <canvas id="npmChart"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <section id="async-evolution">
+          <h2 class="text-3xl font-bold text-center mb-10">
+            Evolution of Asynchronous Code
+          </h2>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="bg-gray-800 rounded-2xl shadow-2xl p-6">
+              <h3 class="font-bold text-xl mb-3 text-red-400">
+                Callbacks (The Past)
+              </h3>
+              <p class="text-sm text-gray-400 mb-4">
+                Early Node.js relied on callbacks, functions passed as
+                arguments. Deeply nested callbacks led to "Callback Hell,"
+                making code hard to read and maintain.
+              </p>
+              <pre
+                class="bg-gray-900 rounded-md p-3 text-xs overflow-x-auto"
+              ><code class="language-js">
+doSomething(function(result) {
+  doAnotherThing(result, function(newResult) {
+    doThirdThing(newResult, function(finalResult) {
+      console.log(finalResult);
+    }, failureCallback);
+  }, failureCallback);
+}, failureCallback);
+                        </code></pre>
+            </div>
+            <div class="bg-gray-800 rounded-2xl shadow-2xl p-6">
+              <h3 class="font-bold text-xl mb-3 text-yellow-400">
+                Promises (The Present)
+              </h3>
+              <p class="text-sm text-gray-400 mb-4">
+                Promises introduced a cleaner way to handle async operations,
+                allowing for chaining with `.then()` and centralized error
+                handling with `.catch()`.
+              </p>
+              <pre
+                class="bg-gray-900 rounded-md p-3 text-xs overflow-x-auto"
+              ><code class="language-js">
+doSomething()
+  .then(result => doAnotherThing(result))
+  .then(newResult => doThirdThing(newResult))
+  .then(finalResult => console.log(finalResult))
+  .catch(failureCallback);
+                        </code></pre>
+            </div>
+            <div
+              class="bg-gray-800 rounded-2xl shadow-2xl p-6 border-2"
+              style="border-color: #00f0b5"
+            >
+              <h3 class="font-bold text-xl mb-3" style="color: #00f0b5">
+                Async/Await (The Future)
+              </h3>
+              <p class="text-sm text-gray-400 mb-4">
+                Built on top of Promises, `async/await` lets you write
+                asynchronous code that looks and behaves like synchronous code,
+                making it incredibly clean and intuitive.
+              </p>
+              <pre
+                class="bg-gray-900 rounded-md p-3 text-xs overflow-x-auto"
+              ><code class="language-js">
+async function main() {
+  try {
+    const result = await doSomething();
+    const newResult = await doAnotherThing(result);
+    const finalResult = await doThirdThing(newResult);
+    console.log(finalResult);
+  } catch (error) {
+    failureCallback(error);
+  }
+}
+                        </code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="express-middleware">
+          <h2 class="text-3xl font-bold text-center mb-10">
+            The Express.js Middleware Pipeline
+          </h2>
+          <div
+            class="bg-gray-800 rounded-2xl shadow-2xl p-8 flex flex-col md:flex-row items-center gap-8"
+          >
+            <div
+              class="w-full md:w-1/3 prose prose-invert max-w-none text-gray-300"
+            >
+              <p class="text-lg">
+                Express applications are essentially a series of middleware
+                function calls.
+              </p>
+              <p>
+                When a request hits the server, it travels through a pipeline of
+                middleware. Each piece can inspect the request, modify it, or
+                end the request by sending a response. This modular approach is
+                perfect for handling concerns like logging, authentication, and
+                data parsing in a clean, organized way.
+              </p>
+            </div>
+            <div
+              class="w-full md:w-2/3 flex flex-wrap justify-center items-center gap-4"
+            >
+              <div class="p-3 bg-indigo-500 rounded-lg text-white font-bold">
+                Request In
+              </div>
+              <span class="text-2xl font-bold text-gray-500">→</span>
+              <div class="p-3 bg-gray-700 rounded-lg">Logger (morgan)</div>
+              <span class="text-2xl font-bold text-gray-500">→</span>
+              <div class="p-3 bg-gray-700 rounded-lg">JSON Parser</div>
+              <span class="text-2xl font-bold text-gray-500">→</span>
+              <div class="p-3 bg-gray-700 rounded-lg">Auth Check</div>
+              <span class="text-2xl font-bold text-gray-500">→</span>
+              <div class="p-3 bg-purple-500 rounded-lg text-white font-bold">
+                Route Handler
+              </div>
+              <span class="text-2xl font-bold text-gray-500">→</span>
+              <div
+                class="p-3"
+                style="
+                  background-color: #00f0b5;
+                  color: #1a202c;
+                  border-radius: 0.5rem;
+                  font-weight: bold;
+                "
+              >
+                Response Out
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="api-design">
+          <h2 class="text-3xl font-bold text-center mb-10">
+            Designing REST APIs: HTTP Method Distribution
+          </h2>
+          <div
+            class="bg-gray-800 rounded-2xl shadow-2xl p-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
+          >
+            <div class="chart-container">
+              <canvas id="httpMethodsChart"></canvas>
+            </div>
+            <div class="prose prose-invert max-w-none text-gray-300">
+              <p class="text-lg">
+                A core principle of REST is using standard HTTP methods for
+                actions. This creates predictable, uniform interfaces.
+              </p>
+              <p>
+                In a typical resource-based API, `GET` requests for retrieving
+                data are by far the most common. `POST` is used to create new
+                resources, while `PUT`/`PATCH` update them and `DELETE` removes
+                them. This clear separation of concerns is fundamental to a
+                well-designed API.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="databases">
+          <h2 class="text-3xl font-bold text-center mb-10">
+            The Data Layer: SQL vs. NoSQL
+          </h2>
+          <div
+            class="bg-gray-800 rounded-2xl shadow-2xl p-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
+          >
+            <div class="prose prose-invert max-w-none text-gray-300">
+              <p class="text-lg">
+                Node.js connects to virtually any database. The choice often
+                comes down to two main paradigms: SQL and NoSQL.
+              </p>
+              <ul>
+                <li>
+                  <strong style="color: #6675ff">SQL (Relational):</strong>
+                  Databases like PostgreSQL use structured tables with
+                  predefined schemas. They are known for reliability and data
+                  consistency, making them great for financial applications or
+                  systems with complex relationships.
+                </li>
+                <li>
+                  <strong style="color: #9d66ff"
+                    >NoSQL (Non-relational):</strong
+                  >
+                  Databases like MongoDB use flexible, JSON-like documents. They
+                  are praised for their scalability and flexibility, ideal for
+                  big data, real-time apps, and projects with rapidly evolving
+                  requirements.
+                </li>
+              </ul>
+            </div>
+            <div class="chart-container">
+              <canvas id="databaseChart"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <section id="jwt-flow">
+          <h2 class="text-3xl font-bold text-center mb-10">
+            Stateless Authentication with JSON Web Tokens (JWT)
+          </h2>
+          <div class="bg-gray-800 rounded-2xl shadow-2xl p-8">
+            <div
+              class="grid grid-cols-1 md:grid-cols-5 gap-4 text-center items-center"
+            >
+              <div class="p-4 bg-gray-700 rounded-lg">
+                <div class="text-4xl">1.</div>
+                <p>User logs in with credentials</p>
+              </div>
+              <div
+                class="text-2xl font-bold text-gray-500 transform rotate-90 md:rotate-0"
+              >
+                →
+              </div>
+              <div class="p-4 bg-purple-500 rounded-lg text-white">
+                <div class="text-4xl">2.</div>
+                <p>Server validates & creates a signed JWT</p>
+              </div>
+              <div
+                class="text-2xl font-bold text-gray-500 transform rotate-90 md:rotate-0"
+              >
+                →
+              </div>
+              <div class="p-4 bg-gray-700 rounded-lg">
+                <div class="text-4xl">3.</div>
+                <p>Server sends token to client</p>
+              </div>
+            </div>
+            <div class="text-center my-4">
+              <div class="text-2xl font-bold text-gray-500 transform rotate-90">
+                ↓
+              </div>
+            </div>
+            <div
+              class="grid grid-cols-1 md:grid-cols-5 gap-4 text-center items-center"
+            >
+              <div
+                class="p-4"
+                style="
+                  background-color: #00f0b5;
+                  color: #1a202c;
+                  border-radius: 0.5rem;
+                "
+              >
+                <div class="text-4xl font-bold">5.</div>
+                <p>Server verifies signature & grants access</p>
+              </div>
+              <div
+                class="text-2xl font-bold text-gray-500 transform rotate-90 md:rotate-180"
+              >
+                →
+              </div>
+              <div class="p-4 bg-gray-700 rounded-lg md:col-start-3">
+                <div class="text-4xl">4.</div>
+                <p>
+                  Client sends JWT in `Authorization` header on future requests
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="deployment">
+          <h2 class="text-3xl font-bold text-center mb-10">
+            From Code to Cloud: The Modern Deployment Pipeline
+          </h2>
+          <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-3xl mx-auto">
+            <div class="relative">
+              <div class="timeline-item">
+                <div class="timeline-icon">1</div>
+                <h3 class="font-bold text-xl mb-1" style="color: #00f0b5">
+                  Local Development
+                </h3>
+                <p class="text-gray-400">
+                  Code is written on a developer's machine, often using tools
+                  like `nodemon` for auto-reloading.
+                </p>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-icon">2</div>
+                <h3 class="font-bold text-xl mb-1" style="color: #00f0b5">
+                  Version Control (Git)
+                </h3>
+                <p class="text-gray-400">
+                  Changes are committed and pushed to a remote repository like
+                  GitHub or GitLab.
+                </p>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-icon">3</div>
+                <h3 class="font-bold text-xl mb-1" style="color: #00f0b5">
+                  CI/CD Pipeline
+                </h3>
+                <p class="text-gray-400">
+                  The push triggers an automated pipeline that runs tests (unit,
+                  integration) and checks code quality.
+                </p>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-icon">4</div>
+                <h3 class="font-bold text-xl mb-1" style="color: #00f0b5">
+                  Containerization (Docker)
+                </h3>
+                <p class="text-gray-400">
+                  If tests pass, the application and its dependencies are
+                  packaged into a lightweight, portable Docker container.
+                </p>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-icon">5</div>
+                <h3 class="font-bold text-xl mb-1" style="color: #00f0b5">
+                  Deployment to Cloud
+                </h3>
+                <p class="text-gray-400">
+                  The Docker container is pushed to a registry and deployed to a
+                  cloud platform (like AWS, Heroku, or a VPS), often behind a
+                  reverse proxy like Nginx.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="text-center mt-16 md:mt-24 pt-8 border-t border-gray-700">
+        <p class="text-gray-500">
+          Infographic created to visualize the "Comprehensive Node.js and
+          Express.js Guide".
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const CHART_COLORS = {
+          green: "#00F0B5",
+          cyan: "#00E0F0",
+          indigo: "#6675FF",
+          purple: "#9D66FF",
+          pink: "#F066E0",
+          text: "rgba(226, 232, 240, 0.8)",
+        };
+
+        const tooltipTitleCallback = (tooltipItems) => {
+          const item = tooltipItems[0];
+          let label = item.chart.data.labels[item.dataIndex];
+          if (Array.isArray(label)) {
+            return label.join(" ");
+          }
+          return label;
+        };
+
+        const defaultChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: CHART_COLORS.text,
+              },
+            },
+            tooltip: {
+              callbacks: {
+                title: tooltipTitleCallback,
+              },
+            },
+          },
+          scales: {
+            y: {
+              ticks: { color: CHART_COLORS.text },
+              grid: { color: "rgba(255, 255, 255, 0.1)" },
+            },
+            x: {
+              ticks: { color: CHART_COLORS.text },
+              grid: { color: "rgba(255, 255, 255, 0.1)" },
+            },
+          },
+        };
+
+        const processLabels = (labels) => {
+          return labels.map((label) => {
+            if (label.length > 16) {
+              const words = label.split(" ");
+              const newLabel = [];
+              let line = "";
+              words.forEach((word) => {
+                if ((line + word).length > 16) {
+                  newLabel.push(line.trim());
+                  line = "";
+                }
+                line += word + " ";
+              });
+              newLabel.push(line.trim());
+              return newLabel;
+            }
+            return label;
+          });
+        };
+
+        const npmChartCtx = document.getElementById("npmChart");
+        if (npmChartCtx) {
+          new Chart(npmChartCtx, {
+            type: "bar",
+            data: {
+              labels: ["Express", "Axios", "Lodash", "Nodemon", "Dotenv"],
+              datasets: [
+                {
+                  label: "Weekly Downloads (in Millions)",
+                  data: [26, 28, 45, 4, 15],
+                  backgroundColor: [
+                    CHART_COLORS.green,
+                    CHART_COLORS.indigo,
+                    CHART_COLORS.cyan,
+                    CHART_COLORS.purple,
+                    CHART_COLORS.pink,
+                  ],
+                  borderColor: "transparent",
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: defaultChartOptions,
+          });
+        }
+
+        const httpMethodsChartCtx = document.getElementById("httpMethodsChart");
+        if (httpMethodsChartCtx) {
+          new Chart(httpMethodsChartCtx, {
+            type: "doughnut",
+            data: {
+              labels: [
+                "GET (Read)",
+                "POST (Create)",
+                "PUT/PATCH (Update)",
+                "DELETE (Remove)",
+              ],
+              datasets: [
+                {
+                  label: "API Request Distribution",
+                  data: [65, 20, 10, 5],
+                  backgroundColor: [
+                    CHART_COLORS.indigo,
+                    CHART_COLORS.green,
+                    CHART_COLORS.cyan,
+                    CHART_COLORS.pink,
+                  ],
+                  borderColor: "#1a202c",
+                  borderWidth: 4,
+                },
+              ],
+            },
+            options: {
+              ...defaultChartOptions,
+              scales: {},
+            },
+          });
+        }
+
+        const databaseChartCtx = document.getElementById("databaseChart");
+        if (databaseChartCtx) {
+          new Chart(databaseChartCtx, {
+            type: "pie",
+            data: {
+              labels: ["NoSQL (e.g., MongoDB)", "SQL (e.g., PostgreSQL)"],
+              datasets: [
+                {
+                  label: "Database Usage in Node.js Projects",
+                  data: [60, 40],
+                  backgroundColor: [CHART_COLORS.purple, CHART_COLORS.indigo],
+                  borderColor: "#1a202c",
+                  borderWidth: 4,
+                },
+              ],
+            },
+            options: {
+              ...defaultChartOptions,
+              scales: {},
+            },
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
